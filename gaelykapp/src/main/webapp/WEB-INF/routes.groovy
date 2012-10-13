@@ -6,3 +6,4 @@ get "/failure", forward: "/failure.gtpl"
 
 get "/favicon.ico", redirect: "/images/gaelyk-small-favicon.png"
 get "/firsto", forward: "/controller.groovy"
+post "/firsto", forward: "/submit_search.groovy"
