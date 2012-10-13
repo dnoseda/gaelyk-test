@@ -1,4 +1,6 @@
-import com.google.appengine.api.datastore.Entity
+import com.google.appengine.api.datastore.*
+import static com.google.appengine.api.datastore.FetchOptions.Builder.*
+ 
 
 Entity entity = new Entity("search_task") 
 
@@ -10,9 +12,18 @@ entity.finish_date = new Date() + 1
 
 entity.save() 
 
-def entities = datastore.execute{
-  select all from search_task
-}
+// query the scripts stored in the datastore
+// "savedscript" corresponds to the entity table containing the scripts' text
+def query = new Query("search_task")
+ 
+PreparedQuery preparedQuery = datastore.prepare(query)
+ 
+// return only the first 10 results
+def entities = preparedQuery.asList( withLimit(10) )
+
+//def entities = datastore.execute{
+//  select all from search_task
+//}
 
 html.html{
   body{
