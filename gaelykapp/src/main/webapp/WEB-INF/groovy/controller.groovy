@@ -1,1 +1,1 @@
-forward "/WEB-INF/pages/form.gtpl"
+forward "/WEB-INF/pages/search_form.gtpl"

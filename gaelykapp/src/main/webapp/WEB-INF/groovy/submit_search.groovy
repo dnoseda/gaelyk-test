@@ -12,11 +12,10 @@ entity.finish_date = new Date() + 1
 
 def res = entity.save() 
 
-// query the scripts stored in the datastore
-// "savedscript" corresponds to the entity table containing the scripts' text
-
-//def entities = datastore.execute{
-//  select all from search_task
-//}
+def query = new Query("search_task")
+ 
+PreparedQuery preparedQuery = datastore.prepare(query)
+ 
+request.entities = preparedQuery.asList(withDefaults())
 
 forward 'WEB-INF/pages/tasks.gtpl'

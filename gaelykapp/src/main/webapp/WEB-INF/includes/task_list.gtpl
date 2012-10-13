@@ -1,12 +1,3 @@
-<%
-
-def query = new Query("search_task")
- 
-PreparedQuery preparedQuery = datastore.prepare(query)
- 
-def entities = preparedQuery.asList()
-
-%>
 <table>
   <thead>
     <tr>
@@ -17,12 +8,13 @@ def entities = preparedQuery.asList()
     </tr>
   </thead>
   <tbody>
-    <% entities.each -> task %>
+    <% request.entities.each {task -> %>
     <tr>
       <td>${task.target}</td>
       <td>${task.when}</td>
       <td>${task.how_long}</td>
       <td>${task.status}</td>
     </tr>
+    <% } %>
   </tbody>
 </table>
