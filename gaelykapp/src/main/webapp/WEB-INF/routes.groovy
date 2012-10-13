@@ -5,3 +5,4 @@ get "/success", forward: "/success.gtpl"
 get "/failure", forward: "/failure.gtpl"
 
 get "/favicon.ico", redirect: "/images/gaelyk-small-favicon.png"
+get "/firsto", forward: "/controller.groovy"
