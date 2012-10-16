@@ -1,7 +1,5 @@
 
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import java.util.concurrent.*
 
@@ -22,7 +20,7 @@ log.info "iniciando busqueda con params $params"
 
 
 log.info "Calculating prices"
-def pool = Executors.newCachedThreadPool(ThreadManager.currentRequestThreadFactory())
+def pool = Executors.newFixedThreadPool(10,ThreadManager.currentRequestThreadFactory())
 def defer = { c -> pool.submit(c as Callable) }
 
 def initial = new GregorianCalendar(2012, Calendar.NOVEMBER, 1, 23, 59)
@@ -54,7 +52,7 @@ for(int i=0; i < 10; i++){
 				tasks[fUrl] = {
 					log.info "Starting thread"
 					try{
-						def searchResult = JSONObject.fromObject (url.toURL().getText())
+						def searchResult = (url.toURL().getText()).parseJson()
 						log.info "resultados obtenidos recorriendo..."
 						results[fUrl] = searchResult.Boxs.collect({
 							//log.info "DN price :${it.Itns[0].Tot?.Loc} class ${it.Itns[0].Tot?.Loc.getClass()}"
