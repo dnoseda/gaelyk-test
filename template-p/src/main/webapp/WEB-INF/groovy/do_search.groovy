@@ -1,3 +1,5 @@
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 log.info "iniciando busqueda con params $params"
 
@@ -28,7 +30,7 @@ def show = { k,item ->
 }
 
 def tasks = [:]
-for(int i=0; i < 2; i++){
+for(int i=0; i < range; i++){
 	for(String dest: [ params.target]){
 		def from = initial.clone()
 		from.add(Calendar.DATE, i)
@@ -45,7 +47,7 @@ for(int i=0; i < 2; i++){
 				tasks[fUrl] = {
 					log.info "Starting thread"
 					try{
-						def searchResult = (url.toURL().getText()).parseJson()
+						def searchResult = JSONObject.fromObject(url.toURL().getText())
 						log.info "resultados obtenidos recorriendo..."
 						results[fUrl] = searchResult.Boxs.collect({
 							//log.info "DN price :${it.Itns[0].Tot?.Loc} class ${it.Itns[0].Tot?.Loc.getClass()}"
@@ -79,7 +81,6 @@ tasks.each{k,task ->
 }
 
 
-done.await()
 
 log.info "Imprimiendo Resultados"
 results.each{k, v ->
@@ -95,4 +96,16 @@ mail.send(
 	subject: "resultados",
 	textBody: lines.join("\n")
 )
+
+html.html{
+	body{
+		h3 "resultado"
+		ul{
+			lines.each{ line ->
+				li line
+			}
+		}
+		
+	}
+}
 
