@@ -1,7 +1,7 @@
 
 mail.send(
 	from: "dnoseda@gmail.com",
-	to: "dnoseda@somecompany.com",
+	to: "dnoseda@gmail.com",
 	subject: "resultados",
-	textBody: "aca tenes!!!!!!!"
+	textBody: "aca tenes ${params}!!!!!!!"
 )
