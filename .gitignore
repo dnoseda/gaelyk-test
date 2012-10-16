@@ -5,3 +5,5 @@
 *.war
 *.ear
 gaelykapp/target/
+template-p/.gradle
+template-p/build
