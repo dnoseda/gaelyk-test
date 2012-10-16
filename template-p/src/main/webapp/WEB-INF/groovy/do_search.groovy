@@ -27,7 +27,6 @@ def defer = { c -> pool.submit(c as Callable) }
 
 def initial = new GregorianCalendar(2012, Calendar.NOVEMBER, 1, 23, 59)
 def results = Collections.synchronizedMap([:])
-def range = 5
 def lambda = 2
 def daysBetween = 15
 def lines = []
@@ -81,6 +80,8 @@ for(int i=0; i < 10; i++){
 		}
 	}
 }
+
+log.info "encolando ${tasks.keySet().size()} tareas"
 final CountDownLatch done = new CountDownLatch(tasks.keySet().size());
 
 tasks.each{k,task ->
