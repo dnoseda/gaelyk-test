@@ -4,6 +4,8 @@ import net.sf.json.JSONObject;
 
 import java.util.concurrent.*
 
+import com.google.appengine.api.*
+
 log.info "iniciando busqueda con params $params"
 
 //static countries = [
@@ -19,7 +21,7 @@ log.info "iniciando busqueda con params $params"
 
 
 log.info "Calculating prices"
-def pool = Executors.newCachedThreadPool(com.google.appengine.api.ThreadManager.currentRequestThreadFactory())
+def pool = Executors.newCachedThreadPool(ThreadManager.currentRequestThreadFactory())
 def defer = { c -> pool.submit(c as Callable) }
 
 def initial = new GregorianCalendar(2012, Calendar.NOVEMBER, 1, 23, 59)
