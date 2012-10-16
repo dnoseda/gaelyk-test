@@ -1,32 +1,25 @@
 
-
-
-import java.util.concurrent.*
-
-import com.google.appengine.api.*
-
 log.info "iniciando busqueda con params $params"
 
 //static countries = [
-//	"CCS": "Caracas, Venezuela",
-//	"PAR": "Paris, Francia",
-//	"LON": "Londres, Inglaterra",
-//	"BCN": "Barcelona, España",
-//	"MAD": "Madrid, España",
-//	"LIS": "Lisboa, Portugal",
-//	"ROM": "Roma, Italia",
-//	"PCM": "Playa del carmen, Mexico"
-//]
+	//	"CCS": "Caracas, Venezuela",
+	//	"PAR": "Paris, Francia",
+	//	"LON": "Londres, Inglaterra",
+	//	"BCN": "Barcelona, España",
+	//	"MAD": "Madrid, España",
+	//	"LIS": "Lisboa, Portugal",
+	//	"ROM": "Roma, Italia",
+	//	"PCM": "Playa del carmen, Mexico"
+	//]
 
 
 log.info "Calculating prices"
-def pool = Executors.newFixedThreadPool(10,ThreadManager.currentRequestThreadFactory())
-def defer = { c -> pool.submit(c as Callable) }
 
 def initial = new GregorianCalendar(2012, Calendar.NOVEMBER, 1, 23, 59)
-def results = Collections.synchronizedMap([:])
-def lambda = 2
+def results = [:]
+def lambda = 1
 def daysBetween = 15
+def range = 2
 def lines = []
 def show = { k,item ->
 	//log.info "$k\t${item.stops}\t${item.price}\t${item.from}\t${item.to}\t${item.dest}"
@@ -35,7 +28,7 @@ def show = { k,item ->
 }
 
 def tasks = [:]
-for(int i=0; i < 10; i++){
+for(int i=0; i < 2; i++){
 	for(String dest: [ params.target]){
 		def from = initial.clone()
 		from.add(Calendar.DATE, i)
@@ -62,7 +55,7 @@ for(int i=0; i < 10; i++){
 								to:tos,
 								price:it.Itns[0].Tot?.Loc,
 								dest:dest
-								]
+                                                        ]
 						})
 						//results[fUrl].each{v ->
 							//print "parcial: "
@@ -80,13 +73,9 @@ for(int i=0; i < 10; i++){
 }
 
 log.info "encolando ${tasks.keySet().size()} tareas"
-final CountDownLatch done = new CountDownLatch(tasks.keySet().size());
 
 tasks.each{k,task ->
-	defer{
-		task()
-		done.countDown()
-	}
+	task()
 }
 
 
@@ -102,7 +91,7 @@ pool.shutdown()
 
 mail.send(
 	from: "dnoseda@gmail.com",
-	to: "dnoseda@somecompany.com",
+	to: "dnoseda@gmail.com",
 	subject: "resultados",
 	textBody: lines.join("\n")
 )
